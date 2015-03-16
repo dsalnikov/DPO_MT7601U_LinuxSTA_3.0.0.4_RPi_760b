@@ -4746,7 +4746,6 @@ INT RTMPQueryInformation(
 }
 
 
-#ifdef DBG
 /* 
     ==========================================================================
     Description:
@@ -5212,7 +5211,10 @@ VOID RTMPIoctlRF(
 	PSTRING				ptr;
 	INT					rfId, maxRFIdx, bank_Id;
 	LONG				rfValue;
-	BOOLEAN				bIsPrintAllRF = FALSE, bFromUI;
+	BOOLEAN				bIsPrintAllRF = FALSE;
+#ifdef DBG
+	BOOLEAN				bFromUI;
+#endif /* DBG */
 	INT					memLen = sizeof(CHAR) * (2048+256+12);
 	INT					argLen;
 	
@@ -5225,9 +5227,9 @@ VOID RTMPIoctlRF(
 	if (mpool == NULL) {
 		return;
 	}
-
+#ifdef DBG
 	bFromUI = ((wrq->u.data.flags & RTPRIV_IOCTL_FLAG_UI) == RTPRIV_IOCTL_FLAG_UI) ? TRUE : FALSE;
-	
+#endif /* DBG */
 	NdisZeroMemory(mpool, memLen);
 	msg = (PSTRING)((ULONG)(mpool+3) & (ULONG)~0x03);
 	arg = (PSTRING)((ULONG)(msg+2048+3) & (ULONG)~0x03);
@@ -5384,8 +5386,6 @@ next:
 }
 #endif /* RLT_RF */
 
-
-#endif /* DBG */
 
 
 #ifdef RT65xx
